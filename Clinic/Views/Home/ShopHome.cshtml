@@ -1,0 +1,72 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Welcome";
+}
+<div class="inner-banner" id="home">
+</div>
+<!-- breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Shop Medicine</li>
+    </ol>
+</nav>
+<!-- //breadcrumbs -->
+<div class="container">
+    <h2>Click on a category below to get started</h2>
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="categorywrap">
+                <a href="~/StoreFront/Index/1">
+                    <h2 style="text-align:center">Antidepressants</h2>
+                    <img style="height: 300px; border: 1px solid #ccc; margin-bottom: 20px; width: 250px " src="~/Content2/Images/Antidepressants.jpg" alt="" />
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="categorywrap">
+                <a href="~/StoreFront/Index/2">
+                    <h2 style="text-align:center">Antibiotics</h2>
+                    <img style="height: 300px; width:250px ; border: 1px solid #ccc; margin-bottom: 20px; " src="~/Content2/Images/Antibiotics.jpeg" alt="" />
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="categorywrap">
+                <a href="~/StoreFront/Index/3">
+                    <h2 style="text-align:center">Antipsychotic</h2>
+                    <img style="height: 300px; border: 1px solid #ccc; margin-bottom: 20px; width: 250px" src="~/Content2/Images/Antipsychotics.jpg" alt="" />
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="categorywraplast">
+                <a href="~/StoreFront/Index/4">
+                    <h2 style="text-align:center">Antifungal</h2>
+                    <img style="height: 300px; border: 1px solid #ccc; margin-bottom: 20px; width: 250px" src="~/Content2/Images/Antifungals.png" alt="" />
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="categorywraplast">
+                <a href="~/StoreFront/Index/5">
+                    <h2 style="text-align:center">Antihypertensive</h2>
+                    <img style="height: 300px; border: 1px solid #ccc; margin-bottom: 20px; width: 250px" src="~/Content2/Images/Antihypertensive.png" alt="" />
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="categorywraplast">
+                <a href="~/StoreFront/Index/6">
+                    <h2 style="text-align:center">Opioids</h2>
+                    <img style="height: 300px; border: 1px solid #ccc; margin-bottom: 20px; width: 250px" src="~/Content2/Images/opioids.jpg" alt="" />
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

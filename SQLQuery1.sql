@@ -1,0 +1,17 @@
+﻿drop table __MigrationHistory
+drop table Medicines
+drop table MedicalRecords
+drop table DoctorAppointments
+drop table BloodTypes
+drop table Doctors
+drop table Genders
+drop table AvailableTimes
+drop table Appointments
+drop table AspNetRoles
+drop table AspNetUserClaims
+drop table AspNetUserLogins
+drop table AspNetUserRoles
+drop table AspNetUsers
+drop table Carts
+drop table ClinicBranches
+drop table PatientFiles

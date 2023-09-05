@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Clinic.Models.DoctorAppointment>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="inner-banner" id="home">
+</div>
+<!-- breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">DR Assigned</li>
+    </ol>
+</nav>
+<!-- //breadcrumbs -->
+<div class="container">
+
+   
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.patientEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DoctorEmail)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.patientEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DoctorEmail)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                   
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
+    </div>

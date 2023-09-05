@@ -1,0 +1,507 @@
+﻿
+@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <style>
+        .white-text {
+            color: white;
+        }
+    </style>
+    <title>Clinic Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="keywords" content="Poly Clinic Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
+	SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <!-- Custom Theme files -->
+    <link href="~/css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+    <link href="~/css/style.css" type="text/css" rel="stylesheet" media="all">
+    <!-- font-awesome icons -->
+    <link href="~/css/fontawesome-all.min.css" rel="stylesheet">
+    <!-- //Custom Theme files -->
+    <!-- online-fonts -->
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+
+<body>
+    <!-- banner -->
+    <div class="banner" id="home">
+        <!-- header -->
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-gradient-secondary pt-3">
+
+                <h1>
+                    <a class="navbar-brand text-white" href="index.html">
+                        Clinic Management
+                    </a>
+                </h1>
+                <button class="navbar-toggler ml-md-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-lg-auto text-center">
+                        <li class="nav-item  mr-3 active">
+                            <a class="nav-link text-white active" href="@Url.Action("Index","Home")">
+                                Home
+                                <span class="sr-only">(current)</span>
+                            </a>
+
+
+                        </li>
+
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            @*<li class="nav-item  mr-3">
+                <a class="nav-link text-white text-capitalize" href="@Url.Action("MyProfile","Doctors")">Profile</a>
+            </li>*@
+                            <li class="nav-item  mr-3">
+                                <a class="nav-link text-white text-capitalize" href="@Url.Action("Index","CalendarEvents")">Calendar</a>
+                            </li>
+                            <li class="nav-item dropdown mr-3">
+                                <a class="nav-link dropdown-toggle  text-white text-capitalize" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    Manage
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="@Url.Action("Index","Appointments")">Appointments</a>
+                                    <a class="dropdown-item" href="@Url.Action("Index","Doctors")">Doctors</a>
+                                    <a class="dropdown-item" href="@Url.Action("DrPrescriptions", "Prescriptions")">Prescriptions</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="@Url.Action("Index","ClinicBranches")">Clinics</a>
+                                    <a class="dropdown-item" href="@Url.Action("Index","Patients")">Patients</a>
+                                    @*<a class="dropdown-item" href="@Url.Action("Index","Medicines")">Medicine</a>*@
+                                </div>
+                            </li>
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <li class="nav-item dropdown mr-3">
+                                    <a class="nav-link dropdown-toggle  text-white text-capitalize" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        @User.Identity.GetUserName()
+
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" title="Logout" class="dropdown-item">Logout</a>
+
+                                    </div>
+                                </li>
+                                @*<li class="nav-item  mr-3 ">
+
+                </li>*@
+                                @*<li class="nav-item  mr-3 ">
+
+                </li>*@
+
+                            }
+                        }
+
+                        @if (Request.IsAuthenticated && User.IsInRole("Doctor"))
+                        {
+                            <li class="nav-item  mr-3">
+                                <a class="nav-link text-white text-capitalize" href="@Url.Action("MyProfile","Doctors")">Profile</a>
+                            </li>
+                            <li class="nav-item  mr-3">
+                                <a class="nav-link text-white text-capitalize" href="@Url.Action("Index","CalendarEvents")">Calendar</a>
+                            </li>
+
+                            <li class="nav-item dropdown mr-3">
+                                <a class="nav-link dropdown-toggle  text-white text-capitalize" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    Manage
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                    <a class="dropdown-item" href="@Url.Action("drAppointments","Appointments")">Appointments</a>
+
+                                    <a class="dropdown-item" href="@Url.Action("Index","TimeSlots")">Time Slots</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="@Url.Action("DrPrescriptions", "Prescriptions")">Prescriptions</a>
+                                    <a class="dropdown-item" href="@Url.Action("DrPatientFiles", "PatientFiles")">Patients</a>
+                                    <a class="dropdown-item" href="@Url.Action("DrMedicalRecords", "MedicalRecords")">MedicalRecords</a>
+
+                                </div>
+                            </li>
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <li class="nav-item dropdown mr-3">
+                                    <a class="nav-link dropdown-toggle  text-white text-capitalize" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        @User.Identity.GetUserName()
+
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" title="Logout" class="dropdown-item">Logout</a>
+                                        <a class="dropdown-item" href="@Url.Action("Create","Doctors")">Create Profile</a>
+                                    </div>
+                                </li>
+                                @*<li class="nav-item  mr-3 ">
+
+                </li>*@
+                                @*<li class="nav-item  mr-3 ">
+
+                </li>*@
+
+                            }
+
+                        }
+
+                        @if (Request.IsAuthenticated && !User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                        {
+
+                            <li class="nav-item  mr-3">
+                                <a class="nav-link text-white text-capitalize" href="@Url.Action("MyAppointments","Appointments")">Appointments</a>
+                            </li>
+                            <li class="nav-item  mr-3">
+                                <a class="nav-link text-white text-capitalize" href="@Url.Action("Index","CalendarEvents")">Calendar</a>
+                            </li>
+                            <li class="nav-item  mr-3">
+                                <a class="nav-link text-white text-capitalize" href="@Url.Action("ShopHome","Home")">Shop</a>
+                            </li>
+                            @*<li class="nav-item  mr-3">
+                <a class="nav-link text-white text-capitalize" href="@Url.Action("MyProfile","Patients")">Profile</a>
+            </li>*@
+
+                            <li class="nav-item dropdown mr-3">
+                                <a class="nav-link dropdown-toggle  text-white text-capitalize" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    Manage
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                    @*<a class="dropdown-item" href="@Url.Action("ShopHome","Home")">Dop</a>*@
+                                    <a class="dropdown-item" href="@Url.Action("MyMedicalRecord","MedicalRecords")">Medical Record</a>
+                                    <a class="dropdown-item" href="@Url.Action("Myfile","PatientFiles")">File</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="@Url.Action("MyPrescriptions", "Prescriptions")">Prescriptions</a>
+
+                                    @*<a class="dropdown-item" href="@Url.Action("Index", "PatientFiles")">Patients</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", "MedicalRecords")">MedicalRecords</a>*@
+
+                                </div>
+                            </li>
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                            {
+
+                                @Html.AntiForgeryToken()
+                                <li class="nav-item dropdown mr-3">
+                                    <a class="nav-link dropdown-toggle  text-white text-capitalize" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        @User.Identity.GetUserName()
+
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" title="Logout" class="dropdown-item">Logout</a>
+
+                                    </div>
+
+                                </li>
+
+                            }
+                            <li class="nav-item mr-3" style="color: white !important;">
+                                @{Html.RenderAction("CartSummary", "ShoppingCart");}
+                            </li>
+                        }
+                        @if (!Request.IsAuthenticated)
+                        {
+                            <li class="nav-item  mr-3 ">
+
+                                <a href="~/Account/Register" class="nav-link text-white text-capitalize"> Register</a>
+                            </li>
+                            <li class="nav-item  mr-3 ">
+                                <a href="~/Account/Login" title="Logout" class="nav-link text-white text-capitalize">Login</a>
+                                @*<a class="nav-link text-white text-capitalize" href="services.html">services</a>*@
+                            </li>
+
+                        }
+
+
+                    </ul>
+                </div>
+
+            </nav>
+        </header>
+    </div>
+    @RenderBody()
+    <!-- footer -->
+    <footer class="footer py-md-5 pt-md-3 pb-sm-5">
+
+        <div class="container-fluid py-lg-5 mt-sm-5">
+            <div class="row p-sm-4 px-3 py-5">
+                <div class="col-lg-4 col-md-6 footer-top mt-lg-0 mt-md-5">
+                    <h2>
+                        <a href="index.html" class="text-theme text-uppercase">
+                            Clinic Management
+                        </a>
+                    </h2>
+                    <p class="mt-2">
+                        ******
+                    </p>
+                </div>
+                <div class="col-lg-2  col-md-6 mt-lg-0 mt-5">
+                    <div class=".footerv2-w3ls">
+                        <h3 class="mb-3 w3f_title">Navigation</h3>
+                        <hr>
+                        <ul class="list-agileits">
+                            <li>
+                                <a href="index.html">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="my-2">
+                                <a href="about.html">
+                                    About Us
+                                </a>
+                            </li>
+                            <li class="my-2">
+                                <a href="gallery.html">
+                                    Gallery
+                                </a>
+                            </li>
+                            <li class="mb-2">
+
+                                <a href="services.html">
+                                    Services
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact.html">
+                                    Contact Us
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-lg-0 mt-5">
+                    <div class="footerv2-w3ls">
+                        <h3 class="mb-3 w3f_title">Contact Us</h3>
+                        <hr>
+                        <div class="fv3-contact">
+                            <span class="fas fa-envelope-open mr-2"></span>
+                            <p>
+                                <a href="mailto:example@email.com">clinicmanagement@gmail.com</a>
+                            </p>
+                        </div>
+                        <div class="fv3-contact my-2">
+                            <span class="fas fa-phone-volume mr-2"></span>
+                            <p>+27 882 345 3456</p>
+                        </div>
+                        <div class="fv3-contact">
+                            <span class="fas fa-home mr-2"></span>
+                            <p>
+                                16 Lancers Rd,
+                                <br>Durban 4001
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-lg-0 mt-5">
+                    <div class="footerv2-w3ls">
+                        <h3 class="mb-3 w3f_title">Links</h3>
+                        <hr>
+                        <ul class="list-agileits">
+                            <li>
+                                <a href="index.html">
+                                    Overview
+                                </a>
+                            </li>
+                            <li class="my-2">
+                                <a href="services.html">
+                                    Centres of Excellence
+                                </a>
+                            </li>
+                            <li class="my-2">
+                                <a href="single.html">
+                                    Blog
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="contact.html">
+                                    Find us
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index.html">
+                                    Privacy Policy
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //footer bottom -->
+    </footer>
+    <!-- //footer -->
+    <!-- quick contact -->
+    <div class="container">
+        <div class="outer-col">
+            <div class="heading">Quick Enquiry</div>
+            <div class="form-col">
+                <form action="#" method="post">
+                    <input type="text" class="form-control" placeholder="Name" name="Name" id="user-name" required="">
+                    <input type="email" class="form-control" placeholder="Email" name="Name" id="Email-id" required="">
+                    <input type="text" class="form-control" placeholder="phone number" name="Name" id="phone-number" required="">
+                    <textarea placeholder="your message" class="form-control"></textarea>
+                    <input type="submit" value="send" class="btn_apt">
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- //quick contact -->
+    <!-- copyright -->
+    <div class="cpy-right text-center">
+        <p>
+            © 2023 Clinic Mangement. All rights reserved
+        </p>
+    </div>
+    <!-- //copyright -->
+    <!-- js -->
+    <script src="~/js/jquery-2.2.3.min.js"></script>
+    <!-- //js -->
+    <!-- Banner Responsiveslides -->
+    <script src="~/js/responsiveslides.min.js"></script>
+    <script>
+        // You can also use "$(window).load(function() {"
+        $(function () {
+            // Slideshow 4
+            $("#slider3").responsiveSlides({
+                auto: false,
+                pager: true,
+                nav: false,
+                speed: 500,
+                namespace: "callbacks",
+                before: function () {
+                    $('.events').append("<li>before event fired.</li>");
+                },
+                after: function () {
+                    $('.events').append("<li>after event fired.</li>");
+                }
+            });
+
+        });
+    </script>
+    <!-- //banner responsive slides -->
+    <!-- Flexslider-js for-testimonials -->
+    <script src="~/js/jquery.flexisel.js"></script>
+    <script>
+        $(window).load(function () {
+            $("#flexiselDemo1").flexisel({
+                visibleItems: 1,
+                animationSpeed: 1000,
+                autoPlay: false,
+                autoPlaySpeed: 3000,
+                pauseOnHover: true,
+                enableResponsiveBreakpoints: true,
+                responsiveBreakpoints: {
+                    portrait: {
+                        changePoint: 480,
+                        visibleItems: 1
+                    },
+                    landscape: {
+                        changePoint: 640,
+                        visibleItems: 1
+                    },
+                    tablet: {
+                        changePoint: 768,
+                        visibleItems: 1
+                    }
+                }
+            });
+
+        });
+    </script>
+    <!-- //Flexslider-js for-testimonials -->
+    <!-- //fixed quick contact -->
+    <script>
+        $(function () {
+            var hidden = true;
+            $(".heading").click(function () {
+                if (hidden) {
+                    $(this).parent('.outer-col').animate({
+                        bottom: "0"
+                    }, 1200);
+                } else {
+                    $(this).parent('.outer-col').animate({
+                        bottom: "-305px"
+                    }, 1200);
+                }
+                hidden = !hidden;
+            });
+        });
+    </script>
+    <!-- //fixed quick contact -->
+    <!-- start-smooth-scrolling -->
+    <script src="~/js/easing.js"></script>
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+
+                $('html,body').animate({
+                    scrollTop: $(this.hash).offset().top
+                }, 1000);
+            });
+        });
+    </script>
+    <script type="text/javascript">
+
+        $(".rslides").responsiveSlides({
+            auto: true, // Boolean: Animate automatically, true or false
+            speed: 500 // Integer: Speed of the transition, in milliseconds
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".RemoveLink").click(function (e) {
+                e.preventDefault();
+                // Get the id from the link
+                var recordToDelete = $(this).attr("data-id");
+                if (recordToDelete != '') {
+                    // Perform the ajax post
+                    $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
+                        function (data) {
+                            // Successful requests get here
+                            // Update the page elements
+                            if (data.ItemCount == 0) {
+                                $('#row-' + data.DeleteId).fadeOut('slow');
+                            } else {
+                                $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                            }
+                            $('#cart-total').text(data.CartTotal);
+                            $('#update-message').text(data.Message);
+                            $('#cart-status').text('Cart (' + data.CartCount + ')');
+                        });
+                }
+            });
+        })
+
+    </script>
+    <script src="~/js/SmoothScroll.min.js"></script>
+    <!-- //end-smooth-scrolling -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/js/bootstrap.js"></script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>
