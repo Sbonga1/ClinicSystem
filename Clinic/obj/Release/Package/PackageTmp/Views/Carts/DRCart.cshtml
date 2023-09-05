@@ -1,0 +1,132 @@
+﻿@model IEnumerable<Clinic.Models.Cart>
+
+@{
+    ViewBag.Title = "DRCart";
+}
+
+
+<div class="inner-banner" id="home">
+</div>
+<!-- breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Medicine</li>
+    </ol>
+</nav>
+<!-- //breadcrumbs -->
+<div class="container">
+    @if (User.IsInRole("Doctor"))
+    {
+        <h2>Medicines</h2>
+    }
+    else
+    {
+        <h2>Prescribed Medicine</h2>
+    }
+
+
+    <div class="product-container" style="margin-left: 20px">
+        @foreach (var cart in Model)
+        {
+            <div class="product-card">
+                @if (!string.IsNullOrEmpty(cart.picture))
+                {
+                    <img src="@Url.Content("~/" + cart.picture)" alt="@cart.email" class="product-image">
+                }
+
+                <div class="product-details">
+                    <h3 class="product-title">@cart.medicine</h3>
+
+                    <p class="product-price">R @cart.price</p>
+                    <p class="product-price">@cart.Quantity</p>
+                    <p class="product-price">@cart.description</p>
+                    <p class="product-price">Total Cost: R @(cart.price * cart.Quantity)</p>
+                    @if (User.IsInRole("Doctor"))
+                    {
+
+                        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "CartView", controllerName: "Carts" @*,routeValues: new { medicine = medicine.Name, price = medicine.Price, picture = medicine.Picture, description = medicine.Description }*@)'"> Add Medicine</button>
+                    }
+                </div>
+                @*@Html.ActionLink(".", "Delete", new { id = cart.Id })*@
+            </div>
+           
+
+
+
+        }
+         @if (User.IsInRole("Doctor"))
+            {
+                <button type="button" style="height: 30px; width: 130px" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "OnFinish", controllerName: "Carts" @*,routeValues: new { cost = cart.price * cart.Quantity}*@)'"> Finish</button>
+            }
+           
+    </div>
+</div>
+<style>
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .product-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 250px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+    .product-details {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+    }
+
+    .product-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        font-size: 16px;
+        color: #888;
+    }
+
+    .btn-add-to-cart {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 10px;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .btn-back,
+    .btn-view-cart {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+</style>
+

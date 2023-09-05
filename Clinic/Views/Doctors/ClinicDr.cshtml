@@ -1,0 +1,213 @@
+﻿@model IEnumerable<Clinic.Models.DoctorTimeslotsViewModel>
+@using Clinic.Models;
+@{
+    ApplicationDbContext db = new ApplicationDbContext();
+    ViewBag.Title = "ClinicDr";
+}
+<style>
+    .space-right {
+        margin-right: 50px !important; /* Adjust the margin as needed */
+    }
+    /* Styles for the modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+    }
+
+    .modal-header-left {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+
+<body>
+    <!-- banner -->
+    @*Pivture HeS*@
+
+    <div class="inner-banner" id="home">
+    </div>
+    <!-- breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index","Home")">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Make Appointment</li>
+        </ol>
+    </nav>
+
+    
+
+    <!-- team -->
+    <section class="team-agile py-lg-5">
+        <div class="container py-sm-5 pt-5 pb-0">
+            <div class="title-section text-center pb-lg-5">
+                <h4>world of medicine</h4>
+                <h3 class="w3ls-title text-center text-capitalize">the medical doctors</h3>
+            </div>
+
+
+
+            @foreach (var item in Model)
+            {
+
+
+
+
+
+
+
+
+                <div class="modal doctor-modal" data-doctor-id="@item.Doctor.Id">
+                    <div class="modal-content">
+                        <div class="modal-header-left">
+                            <span class="close">&times;</span>
+                            <h2>Available Times</h2>
+                        </div>
+                        <div class="modal-body">
+                            @if (item.TimeSlot != null)
+                            {
+                                foreach (var timeSlot in item.TimeSlot.AvailableTimeSlots)
+                                {
+                                    <div>
+                                        @timeSlot.Date.ToShortDateString() &nbsp;@timeSlot.StartTime.ToShortTimeString() - @timeSlot.EndTime.ToShortTimeString() &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button type="button" class="btn_apt space-right" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "Appointments", routeValues: new { ClinicName = item.Doctor.clinic, doctor = timeSlot.DoctorEmail,Id=timeSlot.Id })'"> Book</button>
+                                    </div>
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5 pb-lg-5">
+                    <div class="col-md-4 border p-0 my-auto">
+                        <img src="~/@item.Doctor.picture" alt="Doctor" class="img-fluid" alt="team-img" />
+                    </div>
+                    <div class="col-md-8 team-text mt-md-0 mt-5">
+                        <h4>DR @Html.DisplayFor(x => item.Doctor.Surname)</h4>
+                        <small>Email: @Html.DisplayFor(x => item.Doctor.Email)</small>
+                        <p class="my-3">
+
+                        </p>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item border-0">
+                                @*<i class="far fa-check-square  mr-3"></i> Availability: @Html.DisplayFor(x => item.Avalibiliy)*@
+                            </li>
+
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                <strong>Name:</strong> @Html.DisplayFor(x => item.Doctor.Name)
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                <strong>Phone Number:</strong> @Html.DisplayFor(x => item.Doctor.PhoneNumber)
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i><strong>Speciality: </strong> @Html.DisplayFor(x => item.Doctor.MedicalSpecialty)
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i><strong>Clinic: </strong> @Html.DisplayFor(x => item.Doctor.clinic)
+                            </li>
+                            @try
+                            {
+                                 double rate = db.ServiceRatings.Where(x => x.Email == item.Doctor.Email).Average(x => x.Rate);
+                                    double perc = (rate / 5.0) * 100;  
+                                <li class="list-group-item border-0 py-0">
+                                    <i class="far fa-check-square  mr-3"></i><strong>Score:  @perc %</strong> 
+                                </li>
+                            }
+                            catch
+                            {
+                                double rate = 0;
+                                <li class="list-group-item border-0 py-0">
+                                    <i class="far fa-check-square  mr-3"></i><strong>Score: @rate</strong> )
+                                </li>
+                            }
+
+
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                <span class="ot"><strong>Consultation Fee: </strong> @Html.DisplayFor(x => item.Doctor.consultationFee)</span>
+                            </li>
+
+                        </ul>
+                        <button class="open-modal-btn" data-doctor-id="@item.Doctor.Id">Book appointment</button>
+
+
+
+
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+    </section>
+
+</body>
+<script>
+    // Get all the buttons with the class "open-modal-btn"
+    var buttons = document.querySelectorAll(".open-modal-btn");
+
+    // Attach click event listeners to each button
+    buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            var doctorId = button.getAttribute("data-doctor-id");
+            var modal = document.querySelector(".modal[data-doctor-id='" + doctorId + "']");
+            modal.style.display = "block";
+        });
+    });
+
+    // Get all the close buttons with the class "close"
+    var closeButtons = document.querySelectorAll(".close");
+
+    // Attach click event listeners to each close button
+    closeButtons.forEach(function (closeButton) {
+        closeButton.addEventListener("click", function () {
+            var modal = closeButton.closest(".modal");
+            modal.style.display = "none";
+        });
+    });
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target.classList.contains("modal")) {
+            event.target.style.display = "none";
+        }
+    };
+
+</script>

@@ -1,0 +1,260 @@
+﻿@model IEnumerable<Clinic.Models.Doctor>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+    @*<h2>Index</h2>
+    <style>
+        .resized-image {
+            width: 200px;
+            height: auto; /* or specify the height you want */
+        }
+    </style>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalSpecialty)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.picture)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedicalSpecialty)
+                </td>
+
+                <td>
+                    @if (!string.IsNullOrEmpty(item.picture))
+                    {
+                        <img src="@Url.Content("~/DoctorsImg/" + item.picture)" alt="Picture" class="resized-image" />
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>*@
+    
+<body>
+    <!-- banner -->
+    @*Pivture HeS*@
+
+    <div class="inner-banner" id="home">
+    </div>
+    <!-- breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index","Home")">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Clinics</li>
+        </ol>
+    </nav>
+
+    <!-- team -->
+    <section class="team-agile py-lg-5">
+        <div class="container py-sm-5 pt-5 pb-0">
+            <div class="title-section text-center pb-lg-5">
+                <h4>world of medicine</h4>
+                <h3 class="w3ls-title text-center text-capitalize">the medical doctors</h3>
+            </div>
+
+            @foreach (var item in Model)
+            {
+                <div class="row mt-5 pb-lg-5">
+                    <div class="col-md-4 border p-0 my-auto">
+                        <img src="~/DoctorsImg/@item.picture" class="img-fluid" alt="team-img" />
+                    </div>
+                    <div class="col-md-8 team-text mt-md-0 mt-5">
+                        <h4>@Html.DisplayFor(x => item.Name)</h4>
+                        <small>Email: @Html.DisplayFor(x => item.Email)</small>
+                        <p class="my-3">
+                            Name: @Html.DisplayFor(x => item.Name)
+                        </p>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item border-0">
+                                <i class="far fa-check-square  mr-3"></i> Availability: @Html.DisplayFor(x => item.Avalibiliy)
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                Surname: @Html.DisplayFor(x => item.Surname)
+                            </li>
+                            <li class="list-group-item border-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                Phone Number: @Html.DisplayFor(x => item.PhoneNumber)
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>@Html.DisplayFor(x => item.MedicalSpecialty)
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>@Html.DisplayFor(x => item.clinic)
+                            </li>
+                            <li class="list-group-item border-0">
+                                <i class="far fa-clock  mr-3"></i>
+                                <span class="ot">Consultation Fee: @Html.DisplayFor(x => item.consultationFee)</span>
+                            </li>
+                        </ul>
+
+                        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Edit", controllerName: "Doctors", routeValues: new { id = item.Id })'"> Edit Profile</button>
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </div>
+                </div>
+            }
+
+
+            @*<div class="row my-5 py-lg-5">
+                    <div class="col-md-8 team-text  order-1 order-sm-0  mt-md-0 mt-5">
+                        <h4>Dr. Simone L</h4>
+                        <small>Pediatrician</small>
+                        <p class="my-3">
+                            Donec consequat sapien ut leo cursus rhoncus.Quisque velit nisi, pretium ut lacinia in, elementum id
+                            enim. Cras ultricies ligula Nullam dui mi, vulputate ac metus at, semper varius orci. Nulla accumsan
+                            ac elit in congue.
+                        </p>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item border-0">
+                                <i class="far fa-check-square  mr-3"></i>Poly Clinic, Newyork
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                Experience : 8+ years
+                            </li>
+                            <li class="list-group-item border-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                State : Newyork
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>USA
+                            </li>
+                            <li class="list-group-item border-0">
+                                <i class="far fa-clock  mr-3"></i>
+                                <span class="ot">MON - SAT : 11:00 AM - 1:00 PM , 1:00 PM - 4:00 PM </span>
+                            </li>
+                        </ul>
+                        <a href="#" class="btn_apt" data-toggle="modal" data-target="#exampleModalLabel2">make an appointment </a>
+                    </div>
+                    <div class="col-md-4 border p-0 my-auto order-0 order-sm-1">
+                        <img src="images/t2.png" class="img-fluid" alt="team-img" />
+                    </div>
+                </div>
+                <div class="row py-lg-5 mb-5">
+                    <div class="col-md-4 border p-0 my-auto">
+                        <img src="images/t3.png" class="img-fluid" alt="team-img" />
+                    </div>
+                    <div class="col-md-8 team-text mt-md-0 mt-5">
+                        <h4>Dr. Ed M.Carter</h4>
+                        <small>NeuroPoly Clinic</small>
+                        <p class="my-3">
+                            Donec consequat sapien ut leo cursus rhoncus.Quisque velit nisi, pretium ut lacinia in, elementum id
+                            enim. Cras ultricies ligula Nullam dui mi, vulputate ac metus at, semper varius orci. Nulla accumsan
+                            ac elit in congue.
+                        </p>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item border-0">
+                                <i class="far fa-check-square  mr-3"></i>Poly Clinic, Newyork
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                Experience : 8+ years
+                            </li>
+                            <li class="list-group-item border-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                State : Newyork
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>USA
+                            </li>
+                            <li class="list-group-item border-0">
+                                <i class="far fa-clock  mr-3"></i>
+                                <span class="ot">MON - SAT : 11:00 AM - 1:00 PM , 1:00 PM - 4:00 PM </span>
+                            </li>
+                        </ul>
+                        <a href="#" class="btn_apt" data-toggle="modal" data-target="#exampleModalLabel2">make an appointment </a>
+                    </div>
+                </div>
+                <div class="row my-5 py-lg-5 mb-md-0 mb-5">
+                    <div class="col-md-8 team-text order-1 order-sm-0  mt-md-0 mt-5">
+                        <h4>Dr. P.Smith</h4>
+                        <small>
+                            Cardiologist
+                        </small>
+                        <p class="my-3">
+                            Donec consequat sapien ut leo cursus rhoncus.Quisque velit nisi, pretium ut lacinia in, elementum id
+                            enim. Cras ultricies ligula Nullam dui mi, vulputate ac metus at, semper varius orci. Nulla accumsan
+                            ac elit in congue.
+                        </p>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item border-0">
+                                <i class="far fa-check-square  mr-3"></i>Poly Clinic, Newyork
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                Experience : 30 years
+                            </li>
+                            <li class="list-group-item border-0">
+                                <i class="far fa-check-square  mr-3"></i>
+                                State : Newyork
+                            </li>
+                            <li class="list-group-item border-0 py-0">
+                                <i class="far fa-check-square  mr-3"></i>USA
+                            </li>
+                            <li class="list-group-item border-0">
+                                <i class="far fa-clock  mr-3"></i>
+                                <span class="ot">MON - SAT : 11:00 AM - 1:00 PM , 1:00 PM - 4:00 PM </span>
+                            </li>
+                        </ul>
+                        <a href="#" class="btn_apt" data-toggle="modal" data-target="#exampleModalLabel2">make an appointment </a>
+                    </div>
+                    <div class="col-md-4 border p-0 my-auto order-0 order-sm-1">
+                        <img src="images/t4.jpg" class="img-fluid" alt="team-img" />
+                    </div>
+                </div>*@
+        </div>
+    </section>
+
+
+
+
+
+</body>

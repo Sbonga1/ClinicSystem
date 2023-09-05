@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Clinic.Models.MedicalRecord>
+@{
+    ViewBag.Title = "MedicalRecords";
+}
+
+
+<div class="inner-banner" id="home">
+</div>
+<!-- breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Medical Record</li>
+    </ol>
+</nav>
+<!-- //breadcrumbs -->
+<div class="container">
+    <h2>Index</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.bloodPressure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.heartRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Temperature)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Diagnosis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCrated)
+            </th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bloodPressure)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.heartRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Temperature)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diagnosis)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCrated)
+                </td>
+
+                <td>
+
+                    @*<button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "MedicalRecords", routeValues: new { email = item.Email })'"> Create Medical Record</button>*@
+                    @if (item.status == "Created")
+                    {
+                    <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "Prescriptions", routeValues: new { patientEmail = item.Email,idNumber = item.IdNumber })'">Prescibe Medicine</button>
+                    }
+                    <a href="@Url.Content($"~/{item.Email}.pdf")"> PDF</a>
+                    @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+

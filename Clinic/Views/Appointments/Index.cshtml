@@ -1,0 +1,220 @@
+﻿@model IEnumerable<Clinic.Models.Appointment>
+@{
+    ViewBag.Title = "Index";
+}
+
+<head>
+    <style>
+        /* Make the modal backdrop transparent */
+        .modal-backdrop {
+            opacity: 0.5; /* Adjust the opacity value (0.5 for 50% transparency) */
+            background-color: transparent; /* Set the background color to transparent */
+        }
+    </style>
+    <!-- Other head content -->
+    <link rel="stylesheet" href="~/Customcss/table.css">
+</head>
+
+<div class="inner-banner" id="home">
+</div>
+
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Appointments</li>
+    </ol>
+</nav>
+
+<div class="container">
+    <h2>Index</h2>
+
+    @*@if (TempData.ContainsKey("Approve"))
+        {
+            <div class="alert alert-success" id="notification">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                @TempData["Approve"]
+            </div>
+        }
+        @if (TempData.ContainsKey("Decline"))
+        {
+            <div class="alert alert-success" id="notification">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                @TempData["Decline"]
+            </div>
+        }*@
+
+    <!-- Table Styling -->
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Doctor</th>
+                    <th>Phone Number</th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Clinic</th>
+                    
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DRemail)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Surname)</td>
+                        <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
+                        <td>@Html.DisplayFor(modelItem => item.EndTime)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Clinic)</td>
+                     
+                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td>
+                            @if (item.Status == "Awaiting Approval")
+                            {
+                                <button type="button" class="btn btn-primary" onclick="openApproveModal('@item.Email',@item.Id)">Approve</button>
+                                <button type="button" class="btn btn-danger" onclick="openDeclineModal('@item.Email', @item.Id)">Decline</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Reason Modal -->
+    <div id="ApproveModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enter Message/Note to client</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="noteInput" class="form-control" placeholder="Enter note here">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitApprove()">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Reason Modal -->
+    <div id="reasonModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enter Reason for Decline</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="reasonInput" class="form-control" placeholder="Enter reason here">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitDecline()">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    <script>
+    var declineEmail;
+    var declineAppointmentId;
+
+    function openDeclineModal(email, appointmentId) {
+        declineEmail = email;
+        declineAppointmentId = appointmentId;
+        $('#reasonModal').modal('show');
+    }
+
+    function submitDecline() {
+        var reason = $('#reasonInput').val();
+
+        // Perform AJAX request to submit the decline reason
+        $.ajax({
+            url: '@Url.Action("DeclineAppointment", "Appointments")',
+            type: 'POST',
+            data: { email: declineEmail, appointmentId: declineAppointmentId, reason: reason },
+            success: function (result) {
+                if (result.hasOwnProperty('message')) {
+                    // Handle success response
+                    alert(result.message); // Display a success message
+
+                    // Refresh the current page after success
+                    location.reload(); // or window.location.href = window.location.href;
+                } else if (result.hasOwnProperty('error')) {
+                    // Handle error response
+                    alert(result.error); // Display an error message
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle AJAX error
+                alert("An error occurred: " + error);
+            }
+        });
+
+        $('#reasonModal').modal('hide');
+    }
+    </script>
+    <script>
+    var approveEmail;
+    var approveAppointmentId;
+
+    function openApproveModal(email, appointmentId) {
+        approveEmail = email;
+        approveAppointmentId = appointmentId;
+        $('#ApproveModal').modal('show');
+    }
+
+    function submitApprove() {
+        var note = $('#noteInput').val();
+
+        // Perform AJAX request to submit the decline reason
+        $.ajax({
+            url: '@Url.Action("ApproveAppointment", "Appointments")',
+            type: 'POST',
+            data: { email: approveEmail, appointmentId: approveAppointmentId, note: note },
+            success: function (result) {
+                if (result.hasOwnProperty('message')) {
+                    // Handle success response
+                    alert(result.message); // Display a success message
+
+                    // Refresh the current page after success
+                    location.reload(); // or window.location.href = window.location.href;
+                } else if (result.hasOwnProperty('error')) {
+                    // Handle error response
+                    alert(result.error); // Display an error message
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle AJAX error
+                alert("An error occurred: " + error);
+            }
+        });
+
+        $('#ApproveModal').modal('hide');
+    }
+    </script>
+
+    <style>
+        /* Add your custom CSS styles here for further table styling */
+    </style>

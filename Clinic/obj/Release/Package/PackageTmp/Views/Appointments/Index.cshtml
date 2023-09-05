@@ -1,0 +1,189 @@
+﻿@model IEnumerable<Clinic.Models.Appointment>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<head>
+    <!-- Other head content -->
+    <link rel="stylesheet" href="~/Customcss/table.css">
+</head>
+<div class="inner-banner" id="home">
+</div>
+<!-- breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Appointments</li>
+    </ol>
+</nav>
+<!-- //breadcrumbs -->
+@*<div class="container">*@
+
+<h2>Index</h2>
+@if (TempData.ContainsKey("Decline"))
+{
+    <div class="alert alert-success" id="notification">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @TempData["Decline"]
+    </div>
+}
+
+
+<div id="reasonModal" class="modal" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Enter Reason for Decline</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="reasonInput" class="form-control" placeholder="Enter reason here">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submitDecline()">Submit</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<table class="styled-table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            Doctor
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Surname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Clinic)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DRemail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DRemail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Clinic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DRemail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @if (item.Status == "Awaiting Approval")
+                {
+                    <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "DoctorAppointments", routeValues: new { email = item.Email,ClinicName = item.Clinic })'"> approve</button>
+
+                    <p></p>
+                    <button type="button" class="btn_apt" id="Reserv" onclick="openDeclineModal('@item.Email', @item.Id)">Decline</button>
+
+                    @*<button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "DeclineAction", controllerName: "Appointments", routeValues: new { email = item.Email })'"> decline</button>*@
+
+
+                }
+
+
+            </td>
+        </tr>
+    }
+
+</table>
+@*</div>*@
+
+<script>
+    var declineEmail;
+    var declineAppointmentId;
+
+    function openDeclineModal(email, appointmentId) {
+        declineEmail = email;
+        declineAppointmentId = appointmentId;
+        $('#reasonModal').modal('show');
+    }
+
+    function submitDecline() {
+        var reason = $('#reasonInput').val();
+
+        // Perform AJAX request to submit the decline reason
+        $.ajax({
+            url: '@Url.Action("DeclineAppointment", "Appointments")',
+            type: 'POST',
+            data: { email: declineEmail, appointmentId: declineAppointmentId, reason: reason },
+            success: function (result) {
+                // Handle success response
+                // For example, display a success message or perform a redirect
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                // For example, display an error message
+            }
+        });
+
+        $('#reasonModal').modal('hide');
+    }
+</script>
+
+
+
+
+<style>
+    .blue-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: blue;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+</style>

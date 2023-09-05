@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Clinic.Models.Appointment>
+@using Clinic.Models
+@{
+    ApplicationDbContext db = new ApplicationDbContext();
+    ViewBag.Title = "drAppointments";
+}
+
+
+<div class="inner-banner" id="home">
+</div>
+<!-- breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">MyAppointments</li>
+    </ol>
+</nav>
+<!-- //breadcrumbs -->
+<div class="container">
+
+    <h2>Doctor Appointments</h2>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Clinic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clinic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @{var File = db.Appointments.Where(x => x.Email == item.Email).FirstOrDefault();}
+                    @if (File == null)
+                    {
+                        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "PatientFiles", routeValues: new { email = item.Email, name = item.Name,surname = item.Surname, phone = item.PhoneNumber, clinic = item.Clinic })'"> Create File</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "CurrentFile", controllerName: "PatientFiles", routeValues: new { patientEmail = item.Email})'"> Patient File</button>
+                    }
+
+                    @*<button type="button" class="blue-button" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "PatientFiles", routeValues: new { email = item.Email, name = item.Name,surname = item.Surname, phone = item.PhoneNumber })'"> Create Patient File</button>*@
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+

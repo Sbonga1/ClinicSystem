@@ -1,0 +1,201 @@
+﻿@model IEnumerable<Clinic.Models.Appointment>
+@using Clinic.Models
+@{
+    ApplicationDbContext db = new ApplicationDbContext();
+    ViewBag.Title = "MyAppointments";
+}
+<head>
+    <style>
+        /* Make the modal backdrop transparent */
+        .modal-backdrop {
+            opacity: 0.5; /* Adjust the opacity value (0.5 for 50% transparency) */
+            background-color: transparent; /* Set the background color to transparent */
+        }
+    </style>
+    <!-- Other head content -->
+    <link rel="stylesheet" href="~/css/Rate.css">
+</head>
+
+
+<div class="inner-banner" id="home">
+</div>
+<!-- breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Appointments</li>
+    </ol>
+</nav>
+<!-- //breadcrumbs -->
+<div class="container">
+
+    <h2>Appointments</h2>
+    @if (TempData.ContainsKey("Notification"))
+    {
+        <div class="alert alert-success" id="notification">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            @TempData["Notification"]
+        </div>
+    }
+    @if (TempData.ContainsKey("Rate Service Failure"))
+    {
+        <div class="alert alert-success" id="notification">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            @TempData["Rate Service Failure"]
+        </div>
+    }
+    @if (TempData.ContainsKey("Rate Service Success"))
+    {
+        <div class="alert alert-success" id="notification">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            @TempData["Rate Service Success"]
+        </div>
+    }
+
+    <table class="table">
+        <tr>
+            <th>
+                Doctor Email
+            </th>
+            <th>
+                Doctor Name
+            </th>
+            <th>
+                Doctor Surname
+            </th>
+            <th>
+                Consultation Fee
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Clinic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+
+            <div id="rateModal" class="modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Rate Service</h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        @using (Html.BeginForm("RateService", "Rate", FormMethod.Post))
+                        {
+
+
+                            <div class="modal-body">
+                                <div class="text-center">
+                                    @{ var Dr = db.Doctors.Where(x => x.Email == item.DRemail).FirstOrDefault();}
+                                    <img src="~/@Dr.picture" alt="Person's Image" class="rounded-circle" style="width: 100px; height: 100px;">
+                                    <p>DR @Dr.Surname</p>
+                                </div>
+                                <div class="rating-stars">
+                                    <input type="radio" name="selectedRating" id="rs0" value="0" checked><label for="rs0"></label>
+                                    <input type="radio" name="selectedRating" id="rs1" value="1"><label for="rs1"></label>
+                                    <input type="radio" name="selectedRating" id="rs2" value="2"> <label for="rs2"></label>
+                                    <input type="radio" name="selectedRating" id="rs3" value="3"><label for="rs3"></label>
+                                    <input type="radio" name="selectedRating" id="rs4" value="4"><label for="rs4"></label>
+                                    <input type="radio" name="selectedRating" id="rs5" value="5"><label for="rs5"></label>
+                                    <span class="rating-counter"></span>
+                                </div>
+                                <input type="hidden" name="dREmail" value="@item.DRemail" />
+                                <input type="hidden" name="Id" value="@item.Id" />
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DRemail)
+                </td>
+                @{ var Doctor = db.Doctors.Where(x => x.Email == item.DRemail).FirstOrDefault();}
+                <td>
+                    @Doctor.Name
+                </td>
+                <td>
+                    @Doctor.Surname
+                </td>
+                <td>
+                    @Doctor.consultationFee
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clinic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @if (item.Status == "Awaiting Payment")
+                    {
+                        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "CreatePayment", controllerName: "PayPal", routeValues: new { CartTotal = @Doctor.consultationFee, Payment = "Consultation" })'"> Pay</button>
+                    }
+                    @{ 
+                        var rate = db.ServiceRatings.Where(x => x.AppointmentId == item.Id.ToString()).FirstOrDefault(); }
+                    @if (item.Status == "Settled")
+                    {
+
+                        if (rate == null)
+                        {
+
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rateModal" data-doctor-email="@item.DRemail">
+                                Rate Service
+                            </button>
+                        }
+                    }
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".alert .close").on("click", function (e) {
+            $(this).parent().hide();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Handle modal open event
+        $('#rateModal').on('show.bs.modal', function (e) {
+            var doctorEmail = $(e.relatedTarget).data('dREmail');
+            $("#dREmail").val(doctorEmail);
+        });
+    });
+</script>
