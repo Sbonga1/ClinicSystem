@@ -378,6 +378,7 @@
     <Content Include="js\SmoothScroll.min.js" />
     <Content Include="Scripts2\bootstrap.js" />
     <Content Include="Scripts2\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\web-clinic - Web Deploy.pubxml" />
     <None Include="Scripts2\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts2\jquery-1.10.2.js" />
     <Content Include="Scripts2\jquery-1.10.2.min.js" />

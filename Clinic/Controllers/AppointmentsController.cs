@@ -58,7 +58,7 @@ namespace Clinic.Controllers
                 string Surname = app.Surname;
                 // Prepare email message
                 var email2 = new MailMessage();
-                email2.From = new MailAddress("sbonga.dev@outlook.com");
+                email2.From = new MailAddress("clinimanagement@outlook.com");
                 email2.To.Add(email);
                 email2.Subject = "Appointment Approved";
 
@@ -67,15 +67,12 @@ namespace Clinic.Controllers
             "Thank you. Your health is our concern." +
             "\n---------------------------------------------------" +
             "\n\nKind Regards,\nClinic";
-                // Configure SMTP client
-                var smtpClient = new SmtpClient("smtp.office365.com", 587);
-                smtpClient.Credentials = new NetworkCredential("sbonga.dev@outlook.com", "Sbonga@01");
-                smtpClient.EnableSsl = true;
+                // Use the SMTP settings from web.config
+                var smtpClient = new SmtpClient();
 
-                //try
-                //{
-                // Send email
+                // The SmtpClient will automatically use the settings from web.config
                 smtpClient.Send(email2);
+
 
 
 
@@ -118,7 +115,7 @@ namespace Clinic.Controllers
                 string Surname = app.Surname;
                 // Prepare email message
                 var email2 = new MailMessage();
-                email2.From = new MailAddress("sbonga.dev@outlook.com");
+                email2.From = new MailAddress("clinimanagement@outlook.com");
                 email2.To.Add(email);
                 email2.Subject = "Appointment Declined";
 
@@ -127,15 +124,12 @@ namespace Clinic.Controllers
             "Thank you. Your health is our concern." +
             "\n---------------------------------------------------" +
             "\n\nKind Regards,\nClinic";
-                // Configure SMTP client
-                var smtpClient = new SmtpClient("smtp.office365.com", 587);
-                smtpClient.Credentials = new NetworkCredential("sbonga.dev@outlook.com", "Sbonga@01");
-                smtpClient.EnableSsl = true;
+                // Use the SMTP settings from web.config
+                var smtpClient = new SmtpClient();
 
-                //try
-                //{
-                // Send email
+                // The SmtpClient will automatically use the settings from web.config
                 smtpClient.Send(email2);
+
 
                 app.Status = "Declined";
                 db.Entry(timeSlot).State = EntityState.Modified;
@@ -241,31 +235,26 @@ namespace Clinic.Controllers
 
                     // Prepare email message
                     var email = new MailMessage();
-                    email.From = new MailAddress("sbonga.dev@outlook.com");
+                    email.From = new MailAddress("clinimanagement@outlook.com");
                     email.To.Add(Email);
                     email.Subject = "Appointment Submitted";
 
-                    email.Body = "Dear " + appointment.Name + " " + appointment.Surname + "\n\nPlease note that your request for appointment was submitted successfully." +
-                "\n\n---------------------------------------------------\n" +
-                "Thank you. Your health is our concern." +
-                "\n---------------------------------------------------" +
-                "\n\nKind Regards,\nClinic";
-                    // Configure SMTP client
-                    var smtpClient = new SmtpClient("smtp.office365.com", 587);
-                    smtpClient.Credentials = new NetworkCredential("sbonga.dev@outlook.com", "Sbonga@01");
-                    smtpClient.EnableSsl = true;
+                    email.Body = "Dear " + appointment.Name + " " + appointment.Surname + "\n\nPlease note that your request for an appointment was submitted successfully." +
+                        "\n\n---------------------------------------------------\n" +
+                        "Thank you. Your health is our concern." +
+                        "\n---------------------------------------------------" +
+                        "\n\nKind Regards,\nClinic";
 
-                    //try
-                    //{
-                    // Send email
+                    
+                        // Use the SMTP settings from web.config
+                    var smtpClient = new SmtpClient();
+
+                        // The SmtpClient will automatically use the settings from web.config
                     smtpClient.Send(email);
-                    //    ViewBag.Message = "Email sent successfully.";
-                    ////}
-                    //catch (Exception ex)
-                    //{
-                    // Handle exception
-                    //ViewBag.Message = "Error sending email: " + ex.Message;
-                    //}
+
+                       
+                       
+                    
                     var callenderEvent = new CalendarEvent()
                     {
                         subject = appointment.Surname + " Appointment",
@@ -293,9 +282,9 @@ namespace Clinic.Controllers
                     TempData["Notification"] = "Appointment request successfully submitted, Please check your Emails.";
                     return RedirectToAction("MyAppointments");
                 }
-                catch
+                catch(Exception ex)
                 {
-                    TempData["Notification_Failure"] = "Your request could not be completed at this time, Please try again later.";
+                    TempData["Notification_Failure"] = "Your request could not be completed, Please try again later.";
                     return View(appointment);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Clinic.Models.Appointment>
-
+@using Clinic.Models
 @{
+    ApplicationDbContext db = new ApplicationDbContext();
     ViewBag.Title = "drAppointments";
 }
 
@@ -36,10 +37,10 @@
                 @Html.DisplayNameFor(model => model.Surname)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.DisplayNameFor(model => model.StartTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Time)
+                @Html.DisplayNameFor(model => model.EndTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Clinic)
@@ -66,10 +67,10 @@
                     @Html.DisplayFor(modelItem => item.Surname)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Date)
+                    @Html.DisplayFor(modelItem => item.StartTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Time)
+                    @Html.DisplayFor(modelItem => item.EndTime)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Clinic)
@@ -78,9 +79,14 @@
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
-                    @if (item.Status == "Approved")
+                    @{var File = db.PatientFiles.Where(x => x.Email == item.Email).FirstOrDefault();}
+                    @if (File == null)
                     {
                         <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "PatientFiles", routeValues: new { email = item.Email, name = item.Name,surname = item.Surname, phone = item.PhoneNumber, clinic = item.Clinic })'"> Create File</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "CurrentFile", controllerName: "PatientFiles", routeValues: new { patientEmail = item.Email})'"> Patient File</button>
                     }
 
                     @*<button type="button" class="blue-button" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "PatientFiles", routeValues: new { email = item.Email, name = item.Name,surname = item.Surname, phone = item.PhoneNumber })'"> Create Patient File</button>*@

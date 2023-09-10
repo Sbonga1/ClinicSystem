@@ -100,16 +100,18 @@
                 @*<td>
                         @Html.DisplayFor(modelItem => item.signature)
                     </td>*@
-                <td>
+            <td>
 
-                    
+                <a href="@Url.Content($"~/{"PatientFile"+item.Name + item.PatietnId}.pdf")">
+                    Download PDF
+                </a>
 
-                    @*@Html.ActionLink("Approve", "Edit", new { id = item.Id })|*@
-                    @*@Html.ActionLink("Edit", "Edit", new { id = item.PatietnId }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.PatietnId }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.PatietnId })*@
+                @*@Html.ActionLink("Approve", "Edit", new { id = item.Id })|*@
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.PatietnId }) |
+        @Html.ActionLink("Details", "Details", new { id = item.PatietnId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.PatietnId })*@
 
-                </td>
+            </td>
             </tr>
         }
 

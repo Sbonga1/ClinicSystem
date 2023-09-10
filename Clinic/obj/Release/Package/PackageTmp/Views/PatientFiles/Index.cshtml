@@ -105,7 +105,7 @@
                 
                 <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "MedicalRecords", routeValues: new { email = item.Email })'"> Create Medical Record</button>
                 @*<a onclick="location.href='@Url.Action(actionName: "Create", controllerName: "MedicalRecords", routeValues: new { email = item.Email })'"> Create Medical Record</a>*@
-            <a href="@Url.Content($"~/{item.Name}.pdf")">
+            <a href="@Url.Content($"~/{"PatientFile"+item.Name + item.PatietnId}.pdf")">
                 Download PDF
             </a>
 

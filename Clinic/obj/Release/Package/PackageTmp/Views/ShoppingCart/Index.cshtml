@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Store Checkout";
+    //CultureInfo us = new CultureInfo("en-US");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+﻿@using System.Diagnostics.Eventing.Reader
+@using System.Globalization
+@model Clinic.ViewModels.ShoppingCartViewModel
+
+<div class="inner-banner" id="home">
+</div>
+<!-- breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Home</a>
+        </li>
+
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("ShopHome","Home")">Shop</a>
+        </li>
+        @*<li class="breadcrumb-item">
+            <a href=""></a>
+        </li>*@
+
+        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+    </ol>
+</nav>
+<!-- //breadcrumbs -->
+<div class="container">
+
+    <h3 class="text-center">
+        <span><img src="~/Content2/Images/shoping_cart.png" />Your shopping cart:</span>
+    </h3>
+
+    <div id="update-message" class="text-info">
+    </div>
+    @if (Model.CartItems.Count == 0)
+    {
+        <a class="btn-danger" href="~/StoreFront/Index/1">Your shopping cart is empty, continue shopping---></a>
+    }
+    else
+    {
+
+        <table class="table-responsive table-bordered table-striped" style="font-size:30px; padding-left:180px; width:950px">
+            <tr>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Price (each)
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>Sub-total</th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr id="row-@item.ProductId">
+                    <td>
+                        @Html.ActionLink(item.Product.Name, "Details", "Products", new { id = item.ProductId }, null)
+                    </td>
+                    <td>
+                        @item.Product.Price
+                    </td>
+                    <td id="item-count-@item.ProductId">
+                        @item.Count
+                    </td>
+                    <td>
+                        @((item.Product.Price*item.Count).ToString("c"))
+                    </td>
+                    <td>
+                        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "RemoveFromCart", controllerName: "ShoppingCart", routeValues: new { id = item.ProductId})'">Remove</button>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    Total
+                </td>
+                <td></td>
+                <td></td>
+                <td id="cart-total" class="text-success">
+                    <b>@Model.CartTotal.ToString("C")</b>
+                    @{ double tot = ((double)Model.CartTotal);}
+                </td>
+            </tr>
+        </table>
+
+        <p class="button" style="padding-left:180px">
+            <a href="~/StoreFront/Index/1">Continue shopping>></a>
+        </p>
+        @*<p class="button">
+            @Html.ActionLink("Checkout>> ", "AddressAndPayment", "Checkout")
+        </p>*@
+        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "CreatePayment", controllerName: "PayPal", routeValues: new { CartTotal = tot })'">Checkout>></button>
+
+
+    }
+</div>

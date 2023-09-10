@@ -75,7 +75,7 @@
                     {
                     <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "Prescriptions", routeValues: new { patientEmail = item.Email,idNumber = item.IdNumber })'">Prescibe Medicine</button>
                     }
-                    <a href="@Url.Content($"~/{item.Email}.pdf")"> PDF</a>
+                <a href="@Url.Content($"~/{"MedicalRecord" + item.Email + item.Id}.pdf")">Download PDF</a>
                     @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
                 </td>
             </tr>

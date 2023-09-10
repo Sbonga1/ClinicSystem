@@ -138,7 +138,7 @@ namespace Clinic.Controllers
                 table1.AddCell(
                     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                     "Clinic \n" +
-                    "Email :sbonga.prg@outlook.com" + "\n" +
+                    "Email :clinimanagement@outlook.com" + "\n" +
                     "\n" + "\n");
                 table1.AddCell(subtitleCell);
 
@@ -196,16 +196,12 @@ namespace Clinic.Controllers
 
                 byte[] bytes = memoryStream.ToArray();
                 memoryStream.Close();
-                // Specify the file path and name
-                string filePath = Server.MapPath("~/") + prescription.Email+ prescription.Id + ".pdf";
-
-                // Write the PDF bytes to the file
-                System.IO.File.WriteAllBytes(filePath, bytes);
+              
 
                 var attachments = new List<Attachment>();
                 attachments.Add(new Attachment(new MemoryStream(bytes), "Patient File", "application/pdf"));
                 var email = new MailMessage();
-                email.From = new MailAddress("sbonga.dev@outlook.com");
+                email.From = new MailAddress("clinimanagement@outlook.com");
                 email.To.Add(prescription.Email);
                 email.Subject = "Medical Record Created";
                 email.Body = "Dear " + prescription.Name + " " + prescription.Surname + "\n\nPlease see the attached PDF for your clinic file." +
@@ -218,23 +214,11 @@ namespace Clinic.Controllers
                 {
                     email.Attachments.Add(attachment);
                 }
-                // Configure SMTP client
-                var smtpClient = new SmtpClient("smtp.office365.com", 587);
-                smtpClient.Credentials = new NetworkCredential("sbonga.dev@outlook.com", "Sbonga@01");
-                smtpClient.EnableSsl = true;
+                // Use the SMTP settings from web.config
+                var smtpClient = new SmtpClient();
 
-                //try
-                //{
-                // Send email
+                // The SmtpClient will automatically use the settings from web.config
                 smtpClient.Send(email);
-                //    ViewBag.Message = "Email sent successfully.";
-                ////}
-                //catch (Exception ex)
-                //{
-                // Handle exception
-                //ViewBag.Message = "Error sending email: " + ex.Message;
-                //}\
-
 
                 var appointment = db.Appointments.Where(x => x.Email == prescription.Email && x.Status == "Approved").FirstOrDefault();
                 appointment.Status = "Awaiting Payment";
@@ -244,6 +228,11 @@ namespace Clinic.Controllers
                 db.Entry(appointment).State = EntityState.Modified;
                 db.Prescriptions.Add(prescription);
                 db.SaveChanges();
+                // Specify the file path and name
+                string filePath = Server.MapPath("~/") + "Prescription" + prescription.Name + prescription.Id + ".pdf";
+
+                // Write the PDF bytes to the file
+                System.IO.File.WriteAllBytes(filePath, bytes);
                 return RedirectToAction("DrPrescriptions");
             }
 

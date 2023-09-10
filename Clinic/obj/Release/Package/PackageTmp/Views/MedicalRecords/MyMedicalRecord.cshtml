@@ -67,8 +67,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.DateCrated)
                 </td>
+                <td>
+                    <a href="@Url.Content($"~/{"MedicalRecord" + item.Email + item.Id}.pdf")">Download PDF</a>
+                </td>
 
-                
             </tr>
         }
 

@@ -148,22 +148,14 @@ namespace Clinic.Controllers
                     table1.AddCell(
                         "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                         "Clinic \n" +
-                        "Email :sbonga.prg@outlook.com" + "\n" +
+                        "Email :clinimanagement@outlook.com" + "\n" +
                         "\n" + "\n");
                     table1.AddCell(subtitleCell);
-
                     table1.AddCell("Patient ID Number : \t" + patientFile.IdNumber);
                     table1.AddCell("Patient Name : \t" + patientFile.Name);
                     table1.AddCell("Surname : \t" + patientFile.Surname);
-
                     table2.AddCell("Phone Number : \t" + patientFile.PhoneNumber);
-
-
-
-
                     table1.AddCell("Address : \t" + patientFile.Address);
-
-
                     table1.AddCell("Date of Birth: \t" + patientFile.DateOfBirth);
                     table1.AddCell("Blood Type: \t" + patientFile.bloodType);
                     table1.AddCell("Clinic: \t" + patientFile.Clinic);
@@ -227,7 +219,7 @@ namespace Clinic.Controllers
                     var attachments = new List<Attachment>();
                     attachments.Add(new Attachment(new MemoryStream(bytes), "Patient File", "application/pdf"));
                     var email = new MailMessage();
-                    email.From = new MailAddress("sbonga.dev@outlook.com");
+                    email.From = new MailAddress("clinimanagement@outlook.com");
                     email.To.Add(patientFile.Email);
                     email.Subject = "Patient File Created";
                     email.Body = "Dear " + patientFile.Name + " " + patientFile.Surname + "\n\nPlease see the attached PDF for your clinic file." +
@@ -240,29 +232,19 @@ namespace Clinic.Controllers
                     {
                         email.Attachments.Add(attachment);
                     }
-                    // Configure SMTP client
-                    var smtpClient = new SmtpClient("smtp.office365.com", 587);
-                    smtpClient.Credentials = new NetworkCredential("sbonga.dev@outlook.com", "Sbonga@01");
-                    smtpClient.EnableSsl = true;
+                    // Use the SMTP settings from web.config
+                    var smtpClient = new SmtpClient();
 
-                    //try
-                    //{
-                    // Send email
+                    // The SmtpClient will automatically use the settings from web.config
                     smtpClient.Send(email);
-                    //    ViewBag.Message = "Email sent successfully.";
-                    ////}
-                    //catch (Exception ex)
-                    //{
-                    // Handle exception
-                    //ViewBag.Message = "Error sending email: " + ex.Message;
-                    //}
+
                     string currentUser = User.Identity.Name;
                     patientFile.status = "Created";
                     patientFile.drEmail = currentUser;
                     db.PatientFiles.Add(patientFile);
                     db.SaveChanges();
                     // Specify the file path and name
-                    string filePath = Server.MapPath("~/") + patientFile.Name + patientFile.PatietnId + ".pdf";
+                    string filePath = Server.MapPath("~/") +"PatientFile" +patientFile.Name + patientFile.PatietnId + ".pdf";
 
                     // Write the PDF bytes to the file
                     System.IO.File.WriteAllBytes(filePath, bytes);

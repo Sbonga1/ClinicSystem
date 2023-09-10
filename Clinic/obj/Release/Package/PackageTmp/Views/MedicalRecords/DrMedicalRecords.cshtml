@@ -4,11 +4,6 @@
 }
 
 
-
-
-
-
-
 <div class="inner-banner" id="home">
 </div>
 <!-- breadcrumbs -->
@@ -78,9 +73,9 @@
                     @*<button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "MedicalRecords", routeValues: new { email = item.Email })'"> Create Medical Record</button>*@
                     @if (item.status == "Created")
                     {
-                    <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "OnCart", controllerName: "Carts", routeValues: new { email = item.Email })'">Prescibe Medicine</button>
+                    <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "Prescriptions", routeValues: new { patientEmail = item.Email,idNumber = item.IdNumber })'">Prescibe Medicine</button>
                     }
-                    <a href="@Url.Content($"~/{item.Email}.pdf")">Download PDF</a>
+                <a href="@Url.Content($"~/{"MedicalRecord" + item.Email + item.Id}.pdf")">Download PDF</a>
                     @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
                 </td>
             </tr>

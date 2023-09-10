@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<Clinic.Models.ClinicBranch>
+@using Clinic.Models
 @{
+    ApplicationDbContext db = new ApplicationDbContext();
     ViewBag.Title = "Home Page";
 }
 <body>
@@ -12,12 +14,13 @@
             <li class="breadcrumb-item">
                 <a href="@Url.Action("Index","Home")">Home</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Make Appointment</li>
+            
         </ol>
     </nav>
     <!-- //breadcrumbs -->
     <div class="container">
         <h2>Well Come to your digital clinic</h2>
+       
 
         <!-- team -->
         <section class="team-agile py-lg-5">
@@ -102,7 +105,13 @@
                                             <span class="ot">MON - SAT : 11:00 AM - 1:00 PM , 1:00 PM - 4:00 PM </span>
                                         </li>
                                     </ul>
-                                    <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "Doctors", routeValues: new { ClinicName = item.Name })'"> Create Profile</button>
+                                    @{string currentUser = User.Identity.Name;
+                                        var profile = db.Doctors.Where(x => x.Email == currentUser).FirstOrDefault();}
+                                    @if (profile == null)
+                                    {
+                                        <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "Doctors", routeValues: new { ClinicName = item.Name })'"> Create Profile</button>
+                                    }
+
 
                                 </div>
                             </div>

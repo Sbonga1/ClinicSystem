@@ -6,14 +6,15 @@
 
 <style>
     #signature-pad {
-        width: 500px;
-        height: 300px;
-        border: 1px solid black;
+        width: 400px;
+        height: 200px;
+        border: 5px solid black;
     }
+
     #Patientsignature-pad {
-        width: 500px;
-        height: 300px;
-        border: 1px solid black;
+        width: 400px;
+        height: 200px;
+        border: 5px solid black;
     }
 </style>
 
@@ -28,6 +29,15 @@
         <li class="breadcrumb-item active" aria-current="page">Patient Files</li>
     </ol>
 </nav>
+@if (TempData.ContainsKey("FileNotificationFailure"))
+{
+    <div class="alert alert-success" id="notification">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @TempData["FileNotificationFailure"]
+    </div>
+}
 <!-- //breadcrumbs -->
 <div class="container">
     <h2>Create</h2>
@@ -36,128 +46,158 @@
     {
         @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>PatientFile</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <h4>PatientFile</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", style = "width:400px", @readonly ="readonly"} })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Clinic, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Clinic, new { htmlAttributes = new { @class = "form-control", style = "width:400px", @readonly = "readonly" } })
-            @Html.ValidationMessageFor(model => model.Clinic, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", style = "width:400px" , @readonly = "readonly" } })
-            @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control", style = "width:400px" } })
-            @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Gender, new { htmlAttributes = new { @class = "form-control", style = "width:400px" } })
-            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-
-    @*<div class="form-group">
-            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Gender, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.IdNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.IdNumber, new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    style = "width:400px"@*, @readonly = "readonly"*@ }
+                            })
+                            @Html.ValidationMessageFor(model => model.IdNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", style = "width:400px", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>*@
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", style = "width:400px", @readonly = "readonly" } })
-            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", style = "width:400px" } })
-            @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", style = "width:400px" } })
-            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.bloodType, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.bloodType, new { htmlAttributes = new { @class = "form-control", style = "width:400px" } })
-            @Html.ValidationMessageFor(model => model.bloodType, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    @*<div class="form-group">
-            @Html.LabelFor(m => m.Gender, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(m => m.bloodType, ViewBag.Blood as SelectList, "---Select Blood Type---", new { @class = "form-control", style = "width:400px" })
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", style = "width:400px" } })
+                            @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", style = "width:400px", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>*@
-
-    <div class="form-group">
-
-        <div class="col-md-10">
-            <p>Patient Signature:</p>
-            <div id="signatureContainer" style="position: relative;">
-                <canvas id="Patientsignature-pad" width="500" height="200"></canvas>
-
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-4">
+                            <select name="Gender" id="Gender" class="form-control">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control", style = "width:400px" }, type = "datetime-local" })
+                            @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
             </div>
-            @Html.HiddenFor(model => model.signature, new { id = "Customersignature-data" })
-        </div>
-    </div>
-    <div class="form-group">
-
-        <div class="col-md-10">
-            <p>Doctor Signature:</p>
-            <div id="signatureContainer" style="position: relative;">
-                <canvas id="signature-pad" width="500" height="200"></canvas>
-
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", style = "width:400px", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Clinic, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Clinic, new { htmlAttributes = new { @class = "form-control", style = "width:400px", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.Clinic, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
             </div>
-            @Html.HiddenFor(model => model.drSignatur, new { id = "signature-data" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input id="save-btn" type="submit" value="Create" class="btn btn-default" />
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", style = "width:400px" } })
+                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.bloodType, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-4">
+                            <select name="bloodType" id="bloodType" class="form-control">
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-10">
+                            <p>Patient Signature:</p>
+                            <div id="signatureContainer" style="position: relative;">
+                                <canvas id="Patientsignature-pad" width="500" height="200"></canvas>
+
+                            </div>
+                            @Html.HiddenFor(model => model.signature, new { id = "Customersignature-data" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-10">
+                            <p>Doctor Signature:</p>
+                            <div id="signatureContainer" style="position: relative;">
+                                <canvas id="signature-pad" width="500" height="200"></canvas>
+
+                            </div>
+                            @Html.HiddenFor(model => model.drSignatur, new { id = "signature-data" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group text-center">
+                <div style="margin-left:30px" class="col-md-offset-2 col-md-10">
+                    <input id="save-btn" style="width: 250px" type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     }
 
     <div>
@@ -166,31 +206,31 @@
 </div>
 
 
-    @section scripts {
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                // Initialize the signature pad
-                var canvas = document.getElementById('signature-pad');
-                var cust = document.getElementById('Patientsignature-pad');
-                var signaturePad = new SignaturePad(canvas);
-                var CustsignaturePad = new SignaturePad(cust);
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize the signature pad
+            var canvas = document.getElementById('signature-pad');
+            var cust = document.getElementById('Patientsignature-pad');
+            var signaturePad = new SignaturePad(canvas);
+            var CustsignaturePad = new SignaturePad(cust);
 
-                // Handle the save button click event
-                $('#save-btn').click(function () {
-                    // Get the signature data URL and set it as a hidden field value
-                    var signatureData = signaturePad.toDataURL();
-                    var CustsignatureData = CustsignaturePad.toDataURL();
-                    $('#signature-data').val(signatureData);
-                    $('#Customersignature-data').val(CustsignatureData);
+            // Handle the save button click event
+            $('#save-btn').click(function () {
+                // Get the signature data URL and set it as a hidden field value
+                var signatureData = signaturePad.toDataURL();
+                var CustsignatureData = CustsignaturePad.toDataURL();
+                $('#signature-data').val(signatureData);
+                $('#Customersignature-data').val(CustsignatureData);
 
-                    // Submit the form
-                    $('form').submit();
-                });
-
-
+                // Submit the form
+                $('form').submit();
             });
 
 
-        </script>
-    }
+        });
+
+
+    </script>
+}

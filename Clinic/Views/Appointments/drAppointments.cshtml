@@ -79,7 +79,7 @@
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
-                    @{var File = db.Appointments.Where(x => x.Email == item.Email).FirstOrDefault();}
+                    @{var File = db.PatientFiles.Where(x => x.Email == item.Email).FirstOrDefault();}
                     @if (File == null)
                     {
                         <button type="button" class="btn_apt" id="Reserv" onclick="location.href='@Url.Action(actionName: "Create", controllerName: "PatientFiles", routeValues: new { email = item.Email, name = item.Name,surname = item.Surname, phone = item.PhoneNumber, clinic = item.Clinic })'"> Create File</button>
